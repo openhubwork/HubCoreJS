@@ -120,6 +120,8 @@ cat << 'EOF' > public/index.html
     <script src="/components/menu/menu.js"></script>
     <script src="/components/header/index.js"></script>
     <script src="/components/footer/index.js"></script>
+    <!-- اضافه کردن فایل کامپوننت سفارشی -->
+    <script src="/js/hub-tag.js"></script>
 </body>
 </html>
 EOF
@@ -229,6 +231,28 @@ window.addEventListener('DOMContentLoaded', () => {
 EOF
 
 echo "ایجاد فایل 'framework.js'..."
+
+# ایجاد فایل hub-tag.js (تگ سفارشی) با استفاده از heredoc
+cat << 'EOF' > public/js/hub-tag.js
+class HubTag extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.innerHTML = `
+      <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+        <h2>Welcome to HubTag Component</h2>
+        <p>این یک تگ سفارشی است که می‌توانید در هر قسمتی از پروژه از آن استفاده کنید.</p>
+      </div>
+    `;
+  }
+}
+
+customElements.define('hub-tag', HubTag);
+EOF
+
+echo "ایجاد فایل 'hub-tag.js'..."
 
 # ایجاد فایل menu.js در فولدر components/menu با استفاده از heredoc
 cat << 'EOF' > public/components/menu/menu.js
@@ -372,6 +396,8 @@ function renderPage(app) {
         <h1>Home Dashboard</h1>
         <p>ما یک تیم توسعه‌دهنده هستیم که در حال ساخت فریم‌ورک‌های فرانت‌اند هستیم.</p>
         <p>صفحه فعلی: ${Store.getState('currentPage')}</p>
+        <!-- استفاده از تگ سفارشی در صفحه خانه -->
+        <hub-tag></hub-tag>
     `;
     console.log("صفحه خانه بارگذاری شد.");
 }
@@ -699,3 +725,4 @@ echo "لطفاً یک فایل لوگو (مثلاً logo.png) را در پوشه
 echo "برای اجرای سرور، به پوشه '$PROJECT_DIR' بروید و دستور 'sudo npm start' را اجرا کنید."
 echo "سپس مرورگر شما به صورت خودکار به آدرس http://localhost باز خواهد شد."
 echo "برای مشاهده صفحات مختلف، از منو لینک‌های 'خانه', 'درباره ما', 'تماس با ما', 'محصول', و 'کاربران' را انتخاب کنید."
+echo "در هر جای صفحه هم برای تست، می‌توانید به سادگی از تگ سفارشی <hub-tag></hub-tag> استفاده کنید."
